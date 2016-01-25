@@ -496,7 +496,7 @@ public class frmMantEmpresas extends javax.swing.JInternalFrame {
         JTableBinding binding = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ, listaEmpresas, jTableEmpresas);
         BeanProperty bRUC = BeanProperty.create("ruc");
         BeanProperty bEmpresa = BeanProperty.create("nombre");
-        BeanProperty bRepresentante = BeanProperty.create("dniRepresentante.apellidos");                  
+        BeanProperty bRepresentante = BeanProperty.create("dniRepresentante.apellidos");                                           
 
         binding.addColumnBinding(bRUC).setColumnName("RUC").setEditable(false);
         binding.addColumnBinding(bEmpresa).setColumnName("EMPRESA").setEditable(false);

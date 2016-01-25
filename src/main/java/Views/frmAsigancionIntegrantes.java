@@ -435,21 +435,20 @@ public class frmAsigancionIntegrantes extends javax.swing.JDialog {
     PersonaJpaController controladorPersona = new PersonaJpaController();
     DetalleEmpresaJpaController controladorDetalleEmpresa = new DetalleEmpresaJpaController();
  
-    public void presentarDatos() { 
- 
-        this.calculoListaFiltrada(controladorDetalleEmpresa.buscarTodos());
+    public void presentarDatos() {        
+        this.calculoListaFiltrada(controladorDetalleEmpresa.buscarTodos());        
         this.listaPersonasFiltradas = ObservableCollections.observableList(listaPersonasFiltradas);
         JTableBinding binding = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ, listaPersonasFiltradas, jTablePersonaN);       
-        BeanProperty bNombres = BeanProperty.create("idpersona.nombres");
-        BeanProperty bApellidos = BeanProperty.create("idpersona.apellidos");
-        BeanProperty bNum_identificacion = BeanProperty.create("idpersona.dni");
+        BeanProperty bNombres = BeanProperty.create("idPersona.nombres");
+        BeanProperty bApellidos = BeanProperty.create("idPersona.apellidos");
+        BeanProperty bNum_identificacion = BeanProperty.create("idPersona.dni");
         binding.addColumnBinding(bNombres).setColumnName("NOMBRES").setEditable(false);
         binding.addColumnBinding(bApellidos).setColumnName("APELLIDOS").setEditable(false);
         binding.addColumnBinding(bNum_identificacion).setColumnName("DNI").setEditable(false);
         binding.bind();        
         jLabel10.setText(this.datosRecibidos.getNombre());
         jLabel4.setText(this.datosRecibidos.getDniRepresentante().getApellidos()+" "+this.datosRecibidos.getDniRepresentante().getNombres());
-        
+          
         ///------- Presentamos integrantes ya registrados a la Empresa------///  
         List<Detalleempresa> listPersonxEmpresa = new ArrayList<>();
         listPersonxEmpresa = controladorDetalleEmpresa.integrantesXempresa(datosRecibidos);
@@ -459,9 +458,9 @@ public class frmAsigancionIntegrantes extends javax.swing.JDialog {
         }  
         this.listaPersonasDetallexempresa = ObservableCollections.observableList(listaPersonasDetallexempresa);
         JTableBinding binding2 = SwingBindings.createJTableBinding(AutoBinding.UpdateStrategy.READ,listaPersonasDetallexempresa, jTableIntegrantes);        
-        BeanProperty bNombres2 = BeanProperty.create("idpersona.nombres");
-        BeanProperty bApellidos2 = BeanProperty.create("idpersona.apellidos");
-        BeanProperty bNum_identificacion2 = BeanProperty.create("idpersona.dni");
+        BeanProperty bNombres2 = BeanProperty.create("idPersona.nombres");
+        BeanProperty bApellidos2 = BeanProperty.create("idPersona.apellidos");
+        BeanProperty bNum_identificacion2 = BeanProperty.create("idPersona.dni");
         binding2.addColumnBinding(bNombres2).setColumnName("NOMBRES").setEditable(false);
         binding2.addColumnBinding(bApellidos2).setColumnName("APELLIDOS").setEditable(false);
         binding2.addColumnBinding(bNum_identificacion2).setColumnName("DNI").setEditable(false);
@@ -481,7 +480,8 @@ public class frmAsigancionIntegrantes extends javax.swing.JDialog {
     public void calculoListaFiltrada(List<Detalleempresa> odetalleempresa) { 
         for(int i = 0; i < this.listaPersonasFiltradas.size(); i++) {listaPersonasFiltradas.remove(i);}
         List<Empresa> listEmpresas = controladorEmpresa.buscarTodos();
-        List<Persona> listPersonas = controladorPersona.buscarTodos();         
+        List<Persona> listPersonas = controladorPersona.buscarTodos(); 
+        
         ///---Filtro No Mostrar al Representante---///
         for (Empresa listEmpresa : listEmpresas) {         
             for (int j = 0; j < listPersonas.size(); j++) {
@@ -489,11 +489,12 @@ public class frmAsigancionIntegrantes extends javax.swing.JDialog {
                     listPersonas.remove(j);
                 }                
             }
-        }         
+        }   
+      
         ///---Filtro de Personas que Ya estan Asignadas     
         for (Detalleempresa listaPersonasDetalle2 : odetalleempresa) { 
             for (int i=0; i<listPersonas.size(); i++) {
-                if (listaPersonasDetalle2.getIdpersona().getDni().equals(listPersonas.get(i).getDni())) {
+                if (listaPersonasDetalle2.getIdPersona().getDni().equals(listPersonas.get(i).getDni())) {
                     listPersonas.remove(i);
                 }
             }
@@ -502,9 +503,10 @@ public class frmAsigancionIntegrantes extends javax.swing.JDialog {
         for (Persona listPersona : listPersonas) {
             Detalleempresa odetalle = new Detalleempresa();
             odetalle.setIdEmpresa(datosRecibidos);
-            odetalle.setIdpersona(listPersona);
+            odetalle.setIdPersona(listPersona);
             this.listaPersonasFiltradas.add(odetalle);
         }
+        System.out.println(listPersonas.size());
                   
     }
     
@@ -522,7 +524,7 @@ public class frmAsigancionIntegrantes extends javax.swing.JDialog {
             case "DetallesEliminados":
                 for (Detalleempresa listDetalleOrden1 : listaPersonasDetallexempresa) {
                     for (int i = 0; i < listaPersonasDetalleBackup.size(); i++) {
-                        if (Objects.equals(listaPersonasDetalleBackup.get(i).getIdpersona().getDni(), listDetalleOrden1.getIdpersona().getDni())) {
+                        if (Objects.equals(listaPersonasDetalleBackup.get(i).getIdPersona().getDni(), listDetalleOrden1.getIdPersona().getDni())) {
                             listaPersonasDetalleBackup.remove(i);                            
                         }
                     }
